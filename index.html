@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>生日快乐 | 张哲宇</title>
+    <link rel="icon" href="src/images/gift.png" type="image/x-icon">
+    <style>
+        #loginForm {
+            display: none;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #8039c6, #47acae, #143fad);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        #loginForm, #giftCard, #fireworksCard {
+            width: 300px;
+            background: linear-gradient(135deg, #FF0000, #FFFF00, #00FF00);
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        input[type="password"],
+        input[type="submit"] {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+
+        input[type="submit"] {
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        #message {
+            text-align: center;
+            margin-top: 10px;
+            color: red;
+        }
+
+        #giftCard, #fireworksCard {
+            display: none;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        #giftCard h2, #fireworksCard h2 {
+            color: #333;
+        }
+
+        #giftCard a, #fireworksCard a {
+            display: block;
+            margin-top: 10px;
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            border-radius: 3px;
+            padding: 8px;
+            text-decoration: none;
+        }
+
+        #giftCard a:hover, #fireworksCard a:hover {
+            background-color: #45a049;
+        }
+
+        #iframeContainer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 9999;
+            background: linear-gradient(135deg, #8039c6, #47acae, #143fad);
+            display: none;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .radio-bgm {
+            display: flex;
+            align-items: center;
+        }
+
+        .radio-bgm label {
+            margin-right: 15px;
+            margin-left: 15px;
+            margin-top: 18px;
+            display: inline-block;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .radio-bgm label::before {
+            content: "";
+            display: block;
+            position: absolute;
+            top: 0;
+            left: -35px;
+            right: 0;
+            bottom: 0;
+        }
+
+        input[type="radio"] {
+            appearance: none;
+
+            border-radius: 50%;
+            width: 16px;
+            height: 16px;
+
+            border: 2px solid #999;
+            transition: 0.2s all linear;
+            margin-right: 5px;
+
+            position: relative;
+            top: 4px;
+        }
+
+        input[type="radio"]:checked {
+            border: 6px solid black;
+            cursor: pointer;
+        }
+
+        button{
+            color: white;
+            background-color: black;
+            padding: 5px 10px;
+            border-radius: 0;
+            border: 0;
+            font-size: 14px;
+        }
+
+        .radio-bgm label:hover {
+            color: #d51717e7;
+        }
+
+        button:hover,
+        button:focus {
+            color: #999;
+        }
+
+        button:active {
+            background-color: white;
+            color: black;
+            outline: 1px solid black;
+        }
+
+        legend {
+            padding-top: 15px;
+            /* padding-bottom: -1px; */
+        }
+
+    </style>
+    <script>
+        function loadPage(url) {
+            document.getElementById("iframeContainer").style.display = "block";
+            document.getElementById("iframeContent").src = url;
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            var currentDate = new Date();
+            var birthdayDate = new Date(currentDate.getFullYear(), 9, 5); // 10月是9月（0-based）, 5日
+            var loginForm = document.getElementById("loginForm");
+            var giftCard = document.getElementById("giftCard");
+            var fireworksCard = document.getElementById("fireworksCard");
+
+            if (currentDate.toDateString() === birthdayDate.toDateString()) {
+                // 当天是生日，不显示密码登录表单
+                loginForm.style.display = "none";
+                giftCard.style.display = "block";
+                fireworksCard.style.display = "block";
+                var randomNum = Math.random();
+                console.log("随机数为：" + randomNum);
+                if (randomNum >= 0.5) {
+                    var bgmusic = "isyou";
+                } else {
+                    var bgmusic = "shots";
+                }
+                console.log("背景音乐为：" + bgmusic);
+                var audiosrc = document.getElementById('bgaudiosrc');
+                var audio = document.getElementById('bgaudio');
+                audiosrc.src=`/src/audio/${bgmusic}.mp3`;
+                audio.load();
+            } else {
+                // 非生日日期，显示密码登录表单
+                loginForm.style.display = "block";
+                loginForm.addEventListener("submit", function(event) {
+                    event.preventDefault(); // 阻止表单提交
+                    var password = document.getElementById("password").value;
+                    const apiUrl = `https://birthday.wotemo.com/password?password=${password}&id=zhangzheyu`;
+                    var bgmusic = document.querySelector('input[name="bgm"]:checked').value;
+                    console.log("背景音乐为：" + bgmusic);
+                    var audiosrc = document.getElementById('bgaudiosrc');
+                    var audio = document.getElementById('bgaudio');
+                    audiosrc.src=`/src/audio/${bgmusic}.mp3`;
+                    fetch(apiUrl) 
+                        .then(response => response.json()) // 将响应解析为 JSON
+                        .then(data => {
+                        // 处理返回的数据
+                            var passwordcheck = data.result; // API 返回的数据包含一个名为 "result" 的字段
+                            console.log(passwordcheck)
+                            // 检查密码是否正确
+                            if (passwordcheck === true) {
+                                // 密码正确，显示选择卡片
+                                loginForm.style.display = "none";
+                                giftCard.style.display = "block";
+                                fireworksCard.style.display = "block";
+                                audio.load();
+
+                            } else {
+                                // 密码错误，显示错误消息
+                                document.getElementById("message").innerHTML = "密码错误，请重新输入。";
+                            }
+                        })
+                });
+            }
+        });
+    </script>
+</head>
+<body>
+    <audio id="bgaudio" autoplay>
+        <source id="bgaudiosrc" src="none" type="audio/mpeg">
+        您的浏览器不支持音频元素。
+    </audio>
+    <!-- <script>
+        var audio = document.getElementById('audio');
+        audio.play();
+    </script> -->
+    <div id="loginForm">
+        <h1>密码登录</h1>
+        <form id="form">
+            <label for="password">密码：</label>
+            <input type="password" id="password" name="password" required>
+            <br>
+            <legend>背景音乐：</legend>
+            <div class="radio-bgm">
+                <input type="radio" id="bgMusicNone" name="bgm" value="none" checked>
+                <label for="bgMusicNone">不播放</label>
+                <input type="radio" id="bgMusicIsYou" name="bgm" value="isyou">
+                <label for="bgMusicIsYou">是你</label>
+                <input type="radio" id="bgMusicShots" name="bgm" value="shots">
+                <label for="bgMusicShots">Shots</label>
+            </div>
+            <br>
+            <input type="submit" value="登录">
+        </form>
+        <div id="message"></div>
+        <p style="text-align: center; margin-top: 10px;">
+            十月五日（我生日）当天可访问<br>或找张哲宇询问密码亦可😘
+        </p>
+    </div>
+
+    <div id="giftCard">
+        <h2>进入礼物版生日祝福🎁</h2>
+        <a onclick="loadPage('gift.html'); return false;" style="cursor: pointer;">迫不及待等你点我</a>
+    </div>
+
+    <div id="fireworksCard">
+        <h2>进入烟花版生日祝福🎇</h2>
+        <a onclick="loadPage('firework.html'); return false;" style="cursor: pointer;">如意如意快快点我</a>
+    </div>
+
+    <div id="iframeContainer">
+        <iframe id="iframeContent"></iframe>
+    </div>
+</body>
+</html>
