@@ -216,31 +216,24 @@
                 loginForm.addEventListener("submit", function(event) {
                     event.preventDefault(); // 阻止表单提交
                     var password = document.getElementById("password").value;
-                    const apiUrl = `https://birthday.wotemo.com/password?password=${password}&id=zhangzheyu`;
                     var bgmusic = document.querySelector('input[name="bgm"]:checked').value;
                     console.log("背景音乐为：" + bgmusic);
                     var audiosrc = document.getElementById('bgaudiosrc');
                     var audio = document.getElementById('bgaudio');
                     audiosrc.src=`/src/audio/${bgmusic}.mp3`;
-                    fetch(apiUrl) 
-                        .then(response => response.json()) // 将响应解析为 JSON
-                        .then(data => {
-                        // 处理返回的数据
-                            var passwordcheck = data.result; // API 返回的数据包含一个名为 "result" 的字段
-                            console.log(passwordcheck)
-                            // 检查密码是否正确
-                            if (passwordcheck === true) {
-                                // 密码正确，显示选择卡片
-                                loginForm.style.display = "none";
-                                giftCard.style.display = "block";
-                                fireworksCard.style.display = "block";
-                                audio.load();
+                    console.log(passwordcheck)
+                    // 检查密码是否正确
+                    if (password === 'zzy') {
+                        // 密码正确，显示选择卡片
+                        loginForm.style.display = "none";
+                        giftCard.style.display = "block";
+                        fireworksCard.style.display = "block";
+                        audio.load();
 
-                            } else {
-                                // 密码错误，显示错误消息
-                                document.getElementById("message").innerHTML = "密码错误，请重新输入。";
-                            }
-                        })
+                    } else {
+                        // 密码错误，显示错误消息
+                        document.getElementById("message").innerHTML = "密码错误，请重新输入。";
+                    }
                 });
             }
         });
